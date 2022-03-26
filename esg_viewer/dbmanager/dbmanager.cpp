@@ -52,31 +52,33 @@ bool DbManager::addCompanies(const QVector<QVector<QString>>& companies)
    return success;
 }
 
-bool DbManager::addProviders(const QVector<QVector<QString>>& providers)
+bool DbManager::addProviders(const QVector<QVector<std::string>>& providers)
 {
     bool success = false;
     QSqlQuery query;
-    QString text = "DELETE FROM PROVIDERS; INSERT INTO PROVIDERS (name) VALUES ";
+    std::string text = "DELETE FROM PROVIDERS; INSERT INTO PROVIDERS (name) VALUES ";
     for(const auto& row : providers)
     {
-        text += "(";
+        text += "('";
         for(const auto& elem : row)
         {
-            text += elem + ",";
-            text.chop(1);
+            text = (text + elem + "',");
+            text.pop_back();
         }
         text += "), ";
     }
-    text.chop(2);
+    text.pop_back();
+    text.pop_back();
     text += ";";
-    query.prepare(text);
+    qDebug() << QString::fromStdString(text);
+    query.prepare(QString::fromStdString(text));
     if(query.exec())
     {
         success = true;
     }
     else
     {
-         qDebug() << "addProviders error:" << text
+         qDebug() << "addProviders error:" << QString::fromStdString(text)
                   << query.lastError();
     }
     return success;
@@ -113,15 +115,12 @@ bool DbManager::addScores(const QVector<QVector<QString>>& scores)
 }
 
 bool DbManager::addAll(const QVector<QVector<QString>>& companies,
-                       const QVector<QVector<QString>>& providers,
+                       const QVector<QVector<std::string>>& providers,
                        const QVector<QVector<QString>>& scores)
 {
-    if(addCompanies(companies))
-    {
-        if(addProviders(providers))
-                return addScores(scores);
-    };
-    return 0;
+    addCompanies(companies);
+    addProviders(providers);
+    addScores(scores);
 }
 bool DbManager::taskExists(const int id){
     QSqlQuery query;
@@ -173,7 +172,7 @@ bool DbManager::deleteTask(const int id){
 
 DbManager* DbManager::getInstance() {
     if (!s_instance) {
-        s_instance = new DbManager("../data/to-do_db.db");
+        s_instance = new DbManager("..\\data\\to-do_db.db");
     }
     return s_instance;
 }
