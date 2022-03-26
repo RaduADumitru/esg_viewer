@@ -1,5 +1,13 @@
 "KPI","Category"
-"Carbon footprint", "E"
-"emmissions to air", "E"
-"emmissions to water", "E"
-"electromagnetic radiation", "E"
+carbon footprint,E
+emmissions to air,E
+emmissions to water,E
+electromagnetic radiation,E
+customer satisfaction score, S
+Employee Satisfaction Rating,S
+Customer Retention Rate,S
+Quality of hire,S
+Succession planning,G
+Employee engagement,G
+Board diversity,G
+Executive compensation,G
