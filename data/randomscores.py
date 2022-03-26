@@ -12,11 +12,6 @@ with open('companies.csv') as csv_companies:
             ok_agency = False
             companies_list = list(companies_dict)
             agencies_list = list(agencies_dict)
-            # for companies_row in companies_dict:
-            #     print(companies_row)
-            # for companies_row in companies_dict:
-            #     for agencies_row in agencies_dict:
-            #         print(companies_row[0], agencies_row[0])
             for companies_row in companies_list:
                 if ok_company:
                     company_base = random.randint(20, 80)
