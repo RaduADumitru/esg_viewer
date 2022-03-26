@@ -1,5 +1,6 @@
 #include "dbmanager.h"
 #include "qdebug.h"
+#include "..//..//utils//safeSQLexec.cpp"
 #include <QString>
 #include <QSql>
 #include <QSqlQuery>
@@ -80,17 +81,7 @@ bool DbManager::addAgencies(const QVector<QVector<std::string>>& agencies)
     text.pop_back();
     text.pop_back();
     text += ";";
-    qDebug() << QString::fromStdString(text);
-    if(query.exec(QString::fromStdString(text)))
-    {
-        success = true;
-    }
-    else
-    {
-         qDebug() << "addProviders error:" << QString::fromStdString(text)
-                  << query.lastError();
-    }
-    return success;
+    return safeSQLexec(text);
 }
 
 bool DbManager::addScores(const QVector<QVector<QString>>& scores)
