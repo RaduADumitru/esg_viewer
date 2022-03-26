@@ -1,9 +1,9 @@
-Provider
-MSCI
-Sustainalytics
-Bloomberg
-ISS ESG
-V.E
-Refinitiv
-CDP
-Arabesque
+Provider,sector_specific
+MSCI,0
+Sustainalytics,1
+Bloomberg,1
+ISS ESG,0
+V.E,1
+Refinitiv,1
+CDP,0
+Arabesque,0

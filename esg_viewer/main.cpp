@@ -9,8 +9,10 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     qDebug() << "Da";
     DbManager* dbManager = DbManager::getInstance();
-    dbManager->addCompanies(Generate("..\\data\\companies.csv"));
-    dbManager->addAgencies(Generate("..\\data\\providers.csv"));
+    QVector<QVector<std::string>> companies = Generate("..\\data\\companies.csv");
+    dbManager->addCompanies(companies);
+    QVector<QVector<std::string>> providers = Generate("..\\data\\providers.csv");
+    dbManager->addAgencies(providers);
     MainWindow w;
     w.show();
 

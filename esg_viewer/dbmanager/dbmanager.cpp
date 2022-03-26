@@ -23,7 +23,7 @@ DbManager::DbManager(const QString& path)
    }
 }
 
-bool DbManager::addCompanies(const QVector<QVector<std::string>>& companies)
+bool DbManager::addCompanies(QVector<QVector<std::string>>& companies)
 {
     bool success = false;
     QSqlQuery query;
@@ -38,6 +38,7 @@ bool DbManager::addCompanies(const QVector<QVector<std::string>>& companies)
          return false;
     }
     std::string text = "INSERT INTO COMPANIES (name, sector) VALUES ";
+    companies.erase(companies.begin());
     for(const auto& row : companies)
     {
         text += "('";
@@ -54,10 +55,10 @@ bool DbManager::addCompanies(const QVector<QVector<std::string>>& companies)
     text.pop_back();
     text.pop_back();
     text += ";";
-    return safeSQLexec(text);
+    return success && safeSQLexec(text);
 }
 
-bool DbManager::addAgencies(const QVector<QVector<std::string>>& agencies)
+bool DbManager::addAgencies(QVector<QVector<std::string>>& agencies)
 {
     bool success = false;
     QSqlQuery query;
@@ -71,21 +72,24 @@ bool DbManager::addAgencies(const QVector<QVector<std::string>>& agencies)
                   << query.lastError();
          return false;
     }
-    std::string text = "INSERT INTO RATING_AGENCIES (name) VALUES ";
+    std::string text = "INSERT INTO RATING_AGENCIES (name, sector_specific) VALUES ";
+    agencies.erase(agencies.begin());
     for(const auto& row : agencies)
     {
         text += "('";
         for(const auto& elem : row)
         {
-            text = (text + elem + "',");
-            text.pop_back();
+            text = (text + elem + "', '");
         }
+        text.pop_back();
+        text.pop_back();
+        text.pop_back();
         text += "), ";
     }
     text.pop_back();
     text.pop_back();
     text += ";";
-    return safeSQLexec(text);
+    return success && safeSQLexec(text);
 }
 
 bool DbManager::addScores(const QVector<QVector<QString>>& scores)
@@ -116,9 +120,8 @@ bool DbManager::addScores(const QVector<QVector<QString>>& scores)
     }
     return success;
 }
-
-bool DbManager::addAll(const QVector<QVector<std::string>>& companies,
-                       const QVector<QVector<std::string>>& providers,
+bool DbManager::addAll(QVector<QVector<std::string>>& companies,
+                       QVector<QVector<std::string>>& providers,
                        const QVector<QVector<QString>>& scores)
 {
     addCompanies(companies);
