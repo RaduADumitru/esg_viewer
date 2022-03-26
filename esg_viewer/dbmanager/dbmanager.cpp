@@ -23,34 +23,38 @@ DbManager::DbManager(const QString& path)
    }
 }
 
-bool DbManager::addCompanies(const QVector<QVector<QString>>& companies)
+bool DbManager::addCompanies(const QVector<QVector<std::string>>& companies)
 {
-   bool success = false;
-   QSqlQuery query;
-   QString text = "DELETE FROM COMPANIES; INSERT INTO COMPANIES (name, sector) VALUES ";
-   for(const auto& row : companies)
-   {
-       text += "(";
-       for(const auto& elem : row)
-       {
-           text += elem + ",";
-           text.chop(1);
-       }
-       text += "), ";
-   }
-   text.chop(2);
-   text += ";";
-   query.prepare(text);
-   if(query.exec())
-   {
-       success = true;
-   }
-   else
-   {
-        qDebug() << "addCompanies error:" << text
-                 << query.lastError();
-   }
-   return success;
+    bool success = false;
+    QSqlQuery query;
+    if(query.exec(QString::fromStdString("DELETE FROM COMPANIES;")))
+    {
+        success = true;
+    }
+    else
+    {
+         qDebug() << "addCompanies error:" << QString::fromStdString("DELETE FROM COMPANIES;")
+                  << query.lastError();
+         return false;
+    }
+    std::string text = "INSERT INTO COMPANIES (name, sector) VALUES ";
+    for(const auto& row : companies)
+    {
+        text += "('";
+        for(const auto& elem : row)
+        {
+            text = (text + elem + "', '");
+        }
+
+        text.pop_back();
+        text.pop_back();
+        text.pop_back();
+        text += "), ";
+    }
+    text.pop_back();
+    text.pop_back();
+    text += ";";
+    return safeSQLexec(text);
 }
 
 bool DbManager::addAgencies(const QVector<QVector<std::string>>& agencies)
@@ -113,7 +117,7 @@ bool DbManager::addScores(const QVector<QVector<QString>>& scores)
     return success;
 }
 
-bool DbManager::addAll(const QVector<QVector<QString>>& companies,
+bool DbManager::addAll(const QVector<QVector<std::string>>& companies,
                        const QVector<QVector<std::string>>& providers,
                        const QVector<QVector<QString>>& scores)
 {
