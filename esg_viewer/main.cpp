@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     qDebug() << "Da";
     DbManager* dbManager = DbManager::getInstance();
-    dbManager->addCompanies(Gen_Companies());
-    dbManager->addAgencies(Gen_Providers());
+    dbManager->addCompanies(Generate("..\\data\\companies.csv"));
+    dbManager->addAgencies(Generate("..\\data\\providers.csv"));
     MainWindow w;
     w.show();
 
