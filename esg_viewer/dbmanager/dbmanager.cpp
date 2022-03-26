@@ -52,12 +52,22 @@ bool DbManager::addCompanies(const QVector<QVector<QString>>& companies)
    return success;
 }
 
-bool DbManager::addProviders(const QVector<QVector<std::string>>& providers)
+bool DbManager::addAgencies(const QVector<QVector<std::string>>& agencies)
 {
     bool success = false;
     QSqlQuery query;
-    std::string text = "DELETE FROM PROVIDERS; INSERT INTO PROVIDERS (name) VALUES ";
-    for(const auto& row : providers)
+    if(query.exec(QString::fromStdString("DELETE FROM RATING_AGENCIES;")))
+    {
+        success = true;
+    }
+    else
+    {
+         qDebug() << "addProviders error:" << QString::fromStdString("DELETE FROM RATING_AGENCIES;")
+                  << query.lastError();
+         return false;
+    }
+    std::string text = "INSERT INTO RATING_AGENCIES (name) VALUES ";
+    for(const auto& row : agencies)
     {
         text += "('";
         for(const auto& elem : row)
@@ -71,8 +81,7 @@ bool DbManager::addProviders(const QVector<QVector<std::string>>& providers)
     text.pop_back();
     text += ";";
     qDebug() << QString::fromStdString(text);
-    query.prepare(QString::fromStdString(text));
-    if(query.exec())
+    if(query.exec(QString::fromStdString(text)))
     {
         success = true;
     }
@@ -101,8 +110,7 @@ bool DbManager::addScores(const QVector<QVector<QString>>& scores)
     }
     text.chop(2);
     text += ";";
-    query.prepare(text);
-    if(query.exec())
+    if(query.exec(text))
     {
         success = true;
     }
@@ -119,7 +127,7 @@ bool DbManager::addAll(const QVector<QVector<QString>>& companies,
                        const QVector<QVector<QString>>& scores)
 {
     addCompanies(companies);
-    addProviders(providers);
+    addAgencies(providers);
     addScores(scores);
 }
 bool DbManager::taskExists(const int id){

@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     qDebug() << "Da";
     DbManager* dbManager = DbManager::getInstance();
-    dbManager->addProviders(Gen_Providers());
+    dbManager->addAgencies(Gen_Providers());
     MainWindow w;
     w.show();
 
