@@ -172,7 +172,7 @@ bool DbManager::deleteTask(const int id){
 
 DbManager* DbManager::getInstance() {
     if (!s_instance) {
-        s_instance = new DbManager("..\\data\\to-do_db.db");
+        s_instance = new DbManager("..\\data\\esg_db.db");
     }
     return s_instance;
 }

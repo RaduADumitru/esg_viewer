@@ -13,8 +13,8 @@ QVector<QVector<std::string>> Gen_Providers()
     QVector<std::string> row;
     std::string line, word;
 
-    std::fstream file ("C:\\Users\\Lenovo\\Desktop\\HackItAll\\esg_viewer\\data\\providers.csv");
-    if(!file.is_open()) throw std::runtime_error("Could not open file");
+    std::fstream file ("..\\data\\providers.csv");
+    if(!file.is_open()) throw std::runtime_error("Could not open file provider");
 
     while(getline(file, line))
     {
