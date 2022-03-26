@@ -116,9 +116,12 @@ bool DbManager::addAll(const QVector<QVector<QString>>& companies,
                        const QVector<QVector<QString>>& providers,
                        const QVector<QVector<QString>>& scores)
 {
-    addCompanies(companies);
-    addProviders(providers);
-    addScores(scores);
+    if(addCompanies(companies))
+    {
+        if(addProviders(providers))
+                return addScores(scores);
+    };
+    return 0;
 }
 bool DbManager::taskExists(const int id){
     QSqlQuery query;
