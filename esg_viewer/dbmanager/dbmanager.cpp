@@ -9,6 +9,8 @@
 #include <QSqlField>
 #include <fstream>
 #include <sstream>
+#include <QDebug>
+#include <QDir>
 
 DbManager *DbManager::s_instance = 0;
 
@@ -228,57 +230,106 @@ bool DbManager::addAll(QVector<QVector<std::string>>& companies,
     addAgencies(providers);
     addScores(scores);
 }
-bool DbManager::taskExists(const int id){
-    QSqlQuery query;
-    query.prepare("SELECT * FROM Tasks WHERE id = (:id)");
-    query.bindValue(":id", id);
-
-    if (query.exec())
-    {
-       if (query.next())
-       {
-          //it exists
-           return 1;
-       }
-    }
-    return 0;
-}
-QVector<QVector<QString>> DbManager::getAll() {
-    QSqlQuery query("SELECT id, name, description, isDone FROM Tasks");
-    QVector<QVector<QString>> v;
-    int row = 0;
-    while (query.next())
-    {
-        v.push_back(QVector<QString>(4));
-       for(int col = 0; col < 4; col++){
-           v[row][col] = query.value(col).toString();
-       }
-       row++;
-    }
-    return v;
-}
-bool DbManager::deleteTask(const int id){
-    bool success = false;
-    if (taskExists(id))
-    {
-       QSqlQuery query;
-       query.prepare("DELETE FROM Tasks WHERE id = (:id)");
-       query.bindValue(":id", id);
-       success = query.exec();
-
-       if(!success)
-       {
-           qDebug() << "removeTask error:"
-                    << query.lastError();
-       }
-    }
-
-    return success;
-}
 
 DbManager* DbManager::getInstance() {
     if (!s_instance) {
         s_instance = new DbManager("..\\data\\esg_db.db");
     }
     return s_instance;
+}
+
+std::map<std::string, Agency> DbManager::getAgencies()
+{
+    QSqlQuery query("SELECT agency_name, sector_specific FROM RATING_AGENCIES");
+
+    std::map<std::string, Agency> agencies;
+
+    while (query.next()) {
+        QString name = query.value(0).toString();
+        bool sectorSpecific = query.value(1).toBool();
+
+        int numE;
+        int numS;
+        int numG;
+
+        QSqlQuery equery;
+        equery.prepare("select count(kpi_name) "
+                         "from KPI natural join INCLUDES "
+                         "where category = 'e' and "
+                         "agency_name = :name");
+        equery.bindValue(":name", name);
+        equery.exec();
+        equery.next();
+
+        numE = equery.value(0).toInt();
+        qDebug() << numE;
+
+        equery.prepare("select count(kpi_name) "
+                       "from KPI natural join INCLUDES "
+                       "where category = 'S' and "
+                       "agency_name = :name");
+        equery.bindValue(":name", name);
+        equery.exec();
+        equery.next();
+
+        numS = equery.value(0).toInt();
+
+        equery.prepare("select count(kpi_name) "
+                       "from KPI natural join INCLUDES "
+                       "where category = 'G' and "
+                       "agency_name = :name");
+        equery.bindValue(":name", name);
+        equery.exec();
+        equery.next();
+        numG = equery.value(0).toInt();
+
+        agencies[name.toStdString()] = Agency(name.toStdString(), sectorSpecific, numE, numS, numG);
+    }
+
+    return agencies;
+}
+
+int DbManager::getTotalKPI()
+{
+    QSqlQuery query("SELECT count(kpi_name) FROM KPI");
+    query.next();
+    return query.value(0).toInt();
+}
+
+std::vector<Rating> DbManager::getRatings()
+{
+    QSqlQuery query("SELECT agency_name, company_name, year, e_score, s_score, g_score FROM SCORES");
+    std::vector<Rating> ratings;
+
+    while (query.next()) {
+        string agency_name = query.value(0).toString().toStdString();
+//        qDebug() << QString::fromStdString(agency_name);
+        string company_name = query.value(1).toString().toStdString();
+//        qDebug() << QString::fromStdString(company_name);
+        int year = query.value(2).toInt();
+
+        double e_score = query.value(3).toDouble();
+        double s_score = query.value(4).toDouble();
+        double g_score = query.value(5).toDouble();
+
+        ratings.push_back(Rating(company_name, agency_name, year, e_score, s_score, g_score));
+    }
+
+    return ratings;
+}
+
+Company DbManager::getCompany(const std::string &name)
+{
+    QSqlQuery query;
+    query.prepare("SELECT company_name, sector "
+                  "FROM COMPANIES "
+                  "WHERE name = :name");
+    query.bindValue(":name", QString::fromStdString(name));
+
+    query.exec();
+    query.next();
+
+    string sector = query.value(1).toString().toStdString();
+
+    return Company(name, sector);
 }

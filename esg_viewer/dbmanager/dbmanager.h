@@ -2,7 +2,11 @@
 #define DBMANAGER_H
 #include <QSql>
 #include <QSqlDatabase>
-
+#include <map>
+#include <vector>
+#include "agency.h"
+#include "rating.h"
+#include "company.h"
 class DbManager
 {
 public:
@@ -16,6 +20,13 @@ public:
     bool deleteTask(const int id);
     QVector<QVector<QString>> getAll();
     static DbManager* getInstance();
+    /* ------------ Fetch data from database ----------------*/
+    std::map<std::string, Agency> getAgencies();
+    std::vector<Rating> getRatings();
+    Company getCompany(const std::string& name);
+//    int getSectorKPI();
+    int getTotalKPI();
+    /* ------------------------------------------------------*/
 private:
     QSqlDatabase m_db;
     static DbManager* s_instance;

@@ -14,11 +14,18 @@ SOURCES += \
     dbmanager/Initial_Population.cpp \
     dbmanager/dbmanager.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    agency.cpp \
+    company.cpp \
+    rating.cpp \
 
 HEADERS += \
     dbmanager/dbmanager.h \
-    mainwindow.h
+    mainwindow.h \
+    agency.h \
+    company.h \
+    rating.h \
+    types.h \
 
 FORMS += \
     mainwindow.ui
