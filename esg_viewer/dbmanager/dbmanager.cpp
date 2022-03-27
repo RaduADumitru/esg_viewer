@@ -32,15 +32,15 @@ DbManager::DbManager(const QString& path)
 bool DbManager::addCompanies(QVector<QVector<std::string>>& companies)
 {
     bool success = false;
-    QSqlQuery query;
-    if(!query.exec(QString::fromStdString("DELETE FROM COMPANIES;")))
+    QSqlQuery addCompanies_query;
+    if(addCompanies_query.exec(QString::fromStdString("DELETE FROM COMPANIES;")))
     {
         success = true;
     }
     else
     {
          qDebug() << "addCompanies error:" << QString::fromStdString("DELETE FROM COMPANIES;")
-                  << query.lastError();
+                  << addCompanies_query.lastError();
          return false;
     }
     std::string text = "INSERT INTO COMPANIES (company_name, sector) VALUES ";
@@ -67,15 +67,15 @@ bool DbManager::addCompanies(QVector<QVector<std::string>>& companies)
 bool DbManager::addAgencies(QVector<QVector<std::string>>& agencies)
 {
     bool success = false;
-    QSqlQuery query;
-    if(query.exec(QString::fromStdString("DELETE FROM RATING_AGENCIES;")))
+    QSqlQuery addAgencies_query;
+    if(addAgencies_query.exec(QString::fromStdString("DELETE FROM RATING_AGENCIES;")))
     {
         success = true;
     }
     else
     {
          qDebug() << "addProviders error:" << QString::fromStdString("DELETE FROM RATING_AGENCIES;")
-                  << query.lastError();
+                  << addAgencies_query.lastError();
          return false;
     }
     std::string text = "INSERT INTO RATING_AGENCIES (agency_name, sector_specific) VALUES ";
@@ -116,33 +116,34 @@ bool DbManager::addAgencies(QVector<QVector<std::string>>& agencies)
                 // Adds KPI if it doesn't exist
                 std::string kpi_check_text = "select ifnull((select count(1) from KPI where kpi_name like '" + word + "' limit 1), 0);";
                  qDebug() << QString::fromStdString(kpi_check_text) << " ";
-                QSqlQuery query;
-                if(query.exec(QString::fromStdString(kpi_check_text)))
+                QSqlQuery searchKPI_query;
+                if(searchKPI_query.exec(QString::fromStdString(kpi_check_text)))
                 {
                     success = true;
                 }
                 else
                 {
                      qDebug() << "kpi error:" << QString::fromStdString(kpi_check_text)
-                              << query.lastError();
+                              << searchKPI_query.lastError();
                      success = false;
                 }
-                query.next();
-                int returnedValue = query.record().value(0).toInt(); //0 if kpi not found, 1 if it is
+                searchKPI_query.next();
+                int returnedValue = searchKPI_query.record().value(0).toInt(); //0 if kpi not found, 1 if it is
                 if(returnedValue == 0)
                 {
                     getline(str, word, '\r');
                     kpi_category = word;
+                    QSqlQuery addKPI_query;
                     std::string kpi_insert_text = "insert into KPI (kpi_name, category) values ('" + kpi_name + "', lower('" + kpi_category + "'));";
                     // qDebug() << QString::fromStdString(kpi_insert_text);
-                    if(query.exec(QString::fromStdString(kpi_insert_text)))
+                    if(addKPI_query.exec(QString::fromStdString(kpi_insert_text)))
                     {
                         success = true;
                     }
                     else
                     {
                          qDebug() << "kpi error:" << QString::fromStdString(kpi_insert_text)
-                                  << query.lastError();
+                                  << addKPI_query.lastError();
                          success = false;
                     }
                 }
@@ -160,10 +161,10 @@ bool DbManager::addAgencies(QVector<QVector<std::string>>& agencies)
                 else
                 {
                      qDebug() << "kpi error:" << QString::fromStdString(kpi_check_text)
-                              << query.lastError();
+                              << query2.lastError();
                      success = false;
                 }
-                query.next();
+                query2.next();
                 int includesFound = query2.record().value(0).toInt(); //0 if entry not found, 1 if it is
                 if(includesFound == 0)
                 {
@@ -190,15 +191,15 @@ bool DbManager::addAgencies(QVector<QVector<std::string>>& agencies)
 bool DbManager::addScores(QVector<QVector<std::string>>& scores)
 {
     bool success = false;
-    QSqlQuery query;
-    if(query.exec(QString::fromStdString("DELETE FROM SCORES;")))
+    QSqlQuery addScores_query;
+    if(addScores_query.exec(QString::fromStdString("DELETE FROM SCORES;")))
     {
         success = true;
     }
     else
     {
          qDebug() << "addScores error:" << QString::fromStdString("DELETE FROM COMPANIES;")
-                  << query.lastError();
+                  << addScores_query.lastError();
          return false;
     }
     std::string text = "INSERT INTO SCORES (year, company_name, agency_name, e_score, s_score, g_score) VALUES ";
