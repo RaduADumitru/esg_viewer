@@ -33,7 +33,7 @@ bool DbManager::addCompanies(QVector<QVector<std::string>>& companies)
 {
     bool success = false;
     QSqlQuery query;
-    if(query.exec(QString::fromStdString("DELETE FROM COMPANIES;")))
+    if(!query.exec(QString::fromStdString("DELETE FROM COMPANIES;")))
     {
         success = true;
     }

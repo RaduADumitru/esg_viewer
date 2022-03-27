@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui charts
 QT       += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -13,6 +13,7 @@ SOURCES += \
     ../utils/safeSQLexec.cpp \
     dbmanager/Initial_Population.cpp \
     dbmanager/dbmanager.cpp \
+    generategraph.cpp \
     main.cpp \
     mainwindow.cpp \
     agency.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     dbmanager/dbmanager.h \
+    generategraph.h \
     mainwindow.h \
     agency.h \
     company.h \
@@ -28,6 +30,7 @@ HEADERS += \
     types.h \
 
 FORMS += \
+    generategraph.ui \
     mainwindow.ui
 
 # Default rules for deployment.
