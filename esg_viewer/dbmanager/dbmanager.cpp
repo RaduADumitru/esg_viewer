@@ -198,8 +198,8 @@ bool DbManager::addScores(QVector<QVector<std::string>>& scores)
     }
     else
     {
-         qDebug() << "addScores error:" << QString::fromStdString("DELETE FROM COMPANIES;")
-                  << addScores_query.lastError();
+//         qDebug() << "addScores error:" << QString::fromStdString("DELETE FROM SCORES;")
+//                  << addScores_query.lastError();
          return false;
     }
     std::string text = "INSERT INTO SCORES (year, company_name, agency_name, e_score, s_score, g_score) VALUES ";
@@ -220,7 +220,7 @@ bool DbManager::addScores(QVector<QVector<std::string>>& scores)
     text.pop_back();
     text.pop_back();
     text += ";";
-    qDebug() << QString::fromStdString(text);
+//    qDebug() << QString::fromStdString(text);
     return success && safeSQLexec(text);
 }
 bool DbManager::addAll(QVector<QVector<std::string>>& companies,
@@ -263,11 +263,11 @@ std::map<std::string, Agency> DbManager::getAgencies()
         equery.next();
 
         numE = equery.value(0).toInt();
-        qDebug() << numE;
+//        qDebug() << numE;
 
         equery.prepare("select count(kpi_name) "
                        "from KPI natural join INCLUDES "
-                       "where category = 'S' and "
+                       "where category = 's' and "
                        "agency_name = :name");
         equery.bindValue(":name", name);
         equery.exec();
@@ -277,13 +277,14 @@ std::map<std::string, Agency> DbManager::getAgencies()
 
         equery.prepare("select count(kpi_name) "
                        "from KPI natural join INCLUDES "
-                       "where category = 'G' and "
+                       "where category = 'g' and "
                        "agency_name = :name");
         equery.bindValue(":name", name);
         equery.exec();
         equery.next();
         numG = equery.value(0).toInt();
 
+//        qDebug() << "GENERATED AGENCY: " << name << " " << numE << " " << numS << " " << numG;
         agencies[name.toStdString()] = Agency(name.toStdString(), sectorSpecific, numE, numS, numG);
     }
 
@@ -313,6 +314,8 @@ std::vector<Rating> DbManager::getRatings()
         double s_score = query.value(4).toDouble();
         double g_score = query.value(5).toDouble();
 
+//        qDebug() << "GENERATED RATING " << QString::fromStdString(company_name) << " "<< QString::fromStdString(agency_name) << " " << year << " " <<
+//                    e_score << " " << s_score << " " << g_score;
         ratings.push_back(Rating(company_name, agency_name, year, e_score, s_score, g_score));
     }
 

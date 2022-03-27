@@ -41,7 +41,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="startYear"/>
+      <widget class="QSpinBox" name="startYear">
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

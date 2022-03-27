@@ -16,26 +16,46 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QVBoxLayout" name="layoutE">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetFixedSize</enum>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="rightMargin">
+         <number>0</number>
         </property>
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="layoutS">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetFixedSize</enum>
+       <widget class="QLabel" name="LetterRating">
+        <property name="font">
+         <font>
+          <pointsize>72</pointsize>
+          <italic>true</italic>
+          <bold>true</bold>
+         </font>
         </property>
-       </layout>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="layoutG">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="layoutESG">
         <property name="sizeConstraint">
          <enum>QLayout::SetFixedSize</enum>
         </property>
@@ -44,11 +64,11 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="layoutESG">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetFixedSize</enum>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>View Data</string>
       </property>
-     </layout>
+     </widget>
     </item>
    </layout>
   </widget>

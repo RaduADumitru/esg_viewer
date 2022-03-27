@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
-    GenerateGraph g;
-    g.show();
+//    GenerateGraph g;
+//    g.show();
     Company comp = DbManager::getInstance()->getCompany("Lukoil");
         qDebug() << QString::fromStdString(comp.getName());
         qDebug() << comp.calculateScore(E_SCORE, 2018, false);
