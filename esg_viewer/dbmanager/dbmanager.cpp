@@ -41,7 +41,7 @@ bool DbManager::addCompanies(QVector<QVector<std::string>>& companies)
                   << query.lastError();
          return false;
     }
-    std::string text = "INSERT INTO COMPANIES (name, sector) VALUES ";
+    std::string text = "INSERT INTO COMPANIES (company_name, sector) VALUES ";
     companies.erase(companies.begin());
     for(const auto& row : companies)
     {
