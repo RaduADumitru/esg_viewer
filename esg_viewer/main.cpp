@@ -13,6 +13,9 @@ int main(int argc, char *argv[])
     dbManager->addCompanies(companies);
     QVector<QVector<std::string>> providers = Generate("..\\data\\providers.csv");
     dbManager->addAgencies(providers);
+    QVector<QVector<std::string>> scores = Generate("..\\data\\scores.csv");
+    dbManager->addScores(scores);
+
     MainWindow w;
     w.show();
 

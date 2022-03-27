@@ -8,10 +8,10 @@ class DbManager
 public:
     bool addCompanies(QVector<QVector<std::string>>& v);
     bool addAgencies(QVector<QVector<std::string>>& v);
-    bool addScores(const QVector<QVector<QString>>& scores);
+    bool addScores(QVector<QVector<std::string> > &scores);
     bool addAll(QVector<QVector<std::string>>& companies,
                            QVector<QVector<std::string>>& agencies,
-                           const QVector<QVector<QString>>& scores);
+                           QVector<QVector<std::string>>& scores);
     bool taskExists(const int id);
     bool deleteTask(const int id);
     QVector<QVector<QString>> getAll();
