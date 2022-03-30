@@ -7,6 +7,7 @@
 #include <generategraph.h>
 #include <QLineSeries>
 #include <QLayoutItem>
+#include <QValueAxis>
 
 #include <vector>
 #include <utility>
@@ -103,10 +104,47 @@ void MainWindow::readyToGenerate(QString companyName, int startYear, int numYear
     gChart->addSeries(gSeries);
     esgChart->addSeries(esgSeries);
 
-    eChart->createDefaultAxes();
-    sChart->createDefaultAxes();
-    gChart->createDefaultAxes();
-    esgChart->createDefaultAxes();
+//    eChart->createDefaultAxes();
+//    sChart->createDefaultAxes();
+//    gChart->createDefaultAxes();
+//    esgChart->createDefaultAxes();
+
+    QValueAxis *eXAxis = new QValueAxis();
+    eXAxis -> setRange(startYear, startYear + numYears);
+    eXAxis -> setTickCount(numYears);
+    eXAxis -> setLabelFormat("%d");
+    QValueAxis *eYAxis = new QValueAxis();
+    eYAxis -> setLabelFormat("%.2f");
+    eChart->setAxisX(eXAxis, eSeries);
+    eChart->setAxisY(eYAxis, eSeries);
+
+    QValueAxis *sXAxis = new QValueAxis();
+    sXAxis -> setRange(startYear, startYear + numYears);
+    sXAxis -> setTickCount(numYears);
+    sXAxis -> setLabelFormat("%d");
+    QValueAxis *sYAxis = new QValueAxis();
+    sYAxis -> setLabelFormat("%.2f");
+    sChart->setAxisX(sXAxis, sSeries);
+    sChart->setAxisY(sYAxis, sSeries);
+
+    QValueAxis *gXAxis = new QValueAxis();
+    gXAxis -> setRange(startYear, startYear + numYears);
+    gXAxis -> setTickCount(numYears);
+    gXAxis -> setLabelFormat("%d");
+    QValueAxis *gYAxis = new QValueAxis();
+    gYAxis -> setLabelFormat("%.2f");
+    gChart->setAxisX(gXAxis, gSeries);
+    gChart->setAxisY(gYAxis, gSeries);
+
+    QValueAxis *esgXAxis = new QValueAxis();
+    esgXAxis -> setRange(startYear, startYear + numYears);
+    esgXAxis -> setTickCount(numYears);
+    esgXAxis -> setLabelFormat("%d");
+    QValueAxis *esgYAxis = new QValueAxis();
+    esgYAxis -> setLabelFormat("%.2f");
+    esgChart->setAxisX(esgXAxis, esgSeries);
+    esgChart->setAxisY(esgYAxis, esgSeries);
+
 
     eChart->setTitle("Environmental Evaluation");
     sChart->setTitle("Social Evaluation");
