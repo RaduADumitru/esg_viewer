@@ -6,6 +6,7 @@ Data is stored in an SQLite database, which is populated on startup from a numbe
 * `providers.csv`: Providers (agencies which grant companies reviews on ESG scores)
 * `kpis.csv`: Key Performance Indicators (factors rated by a given provider, belonging to any of the three main categories, such as corruption in the Governance category)
 * `scores.csv`: Reviews made by a provider for a company in a given year
+
 The same folder also contains two Python scripts, used to randomly generate sample data:
 * `generatekpis.py`: For each company, generates a list of KPIs reviewed in `./data/kpis`
 * `randomscores.py`: Randomly generates reviews by every provider for each company in every year able to be reviewed (2000-2020), based on provider's KPIs
